@@ -28,7 +28,25 @@
 
 @media(orientation:portrait){.passenger-card{display:flex;align-items:center;left:50%;right:auto;top:138px;width:124px;transform:translateX(-50%);border-radius:9px}.passenger-card img{width:52px;height:76px;aspect-ratio:auto;object-fit:cover}.passenger-card>div{padding:6px}.passenger-card span{font-size:12px;letter-spacing:0}.passenger-card strong{font-size:14px}.passenger-hit{animation:none}}
 
-  </style>
+/* Persistent signed throttle on the left; steering on the right. */
+.throttle-group{width:166px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 12px 10px;border:1px solid #a8c9d42b;border-radius:20px;background:#070e18dc;pointer-events:auto;box-shadow:0 8px 35px #0003}
+.throttle-group .control-label{font-size:10px;letter-spacing:1.4px}
+#throttleValue{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;color:#d7fca1}
+#throttleDirection{font-size:10px;letter-spacing:1.5px;color:#bdcbd5}
+#throttle{width:100%;height:44px;margin:0;cursor:pointer;touch-action:none;-webkit-appearance:none;appearance:none;background:transparent;pointer-events:auto}
+#throttle::-webkit-slider-runnable-track{height:6px;border-radius:5px;background:linear-gradient(90deg,#82c9f1 0 49%,#fff 49% 51%,#d7fca1 51%)}
+#throttle::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;margin-top:-13px;border:3px solid #e8ffcb;border-radius:50%;background:#456237;box-shadow:0 0 15px #d7fca138}
+#throttle::-moz-range-track{height:6px;border-radius:5px;background:linear-gradient(90deg,#82c9f1 0 49%,#fff 49% 51%,#d7fca1 51%)}
+#throttle::-moz-range-thumb{width:26px;height:26px;border:3px solid #e8ffcb;border-radius:50%;background:#456237}
+#throttle:focus-visible{outline:2px solid #d7fca1;outline-offset:2px;border-radius:8px}
+.throttle-scale{display:flex;justify-content:space-between;width:100%;margin-top:-5px;color:#afc0ce;font-size:11px;font-variant-numeric:tabular-nums}
+.stop-button{min-height:44px;width:100%;border:1px solid #a6bec54d;border-radius:10px;background:#20313f;color:#fff;font:inherit;font-size:12px;letter-spacing:1.5px;cursor:pointer}
+.stop-button:active{background:#3a5260}
+#throttleHint{color:#a9bbc6;font-size:10px}
+@media(max-width:600px){.throttle-group{width:145px;padding:10px}.throttle-group .control-label{font-size:9px;letter-spacing:1px}}
+@media(max-height:620px) and (orientation:landscape){.throttle-group{gap:2px;padding:8px 10px;width:156px}#throttleValue{font-size:22px}#throttleHint{display:none}}
+
+</style>
 </head>
 <body>
   <main id="game" aria-label="SPHÄRE Weltraumspiel">
@@ -53,11 +71,11 @@
     </div>
 
     <section id="startScreen" class="start-screen" aria-labelledby="gameTitle">
-      <div class="eyebrow"><span class="short-line"></span>FREIER FLUG · VERSION 2</div>
+      <div class="eyebrow"><span class="short-line"></span>FREIER FLUG · VERSION 2.1</div>
       <h1 id="gameTitle">Dein Schiff.<br>Dein Kurs.</h1>
       <p>Fliege um die Kugel, wende im All oder<br class="wide-only"> durchquere den Tunnel in beide Richtungen.<br>Helmut ist als Passagier mit an Bord.</p>
       <button id="startButton" class="primary-button">Flug starten <span aria-hidden="true">↗</span></button>
-      <div class="start-controls"><span class="mini-stick" aria-hidden="true">✥</span><span>Stick ziehen: drehen · loslassen: Kurs halten<br><span class="muted">Pfeile / WASD · Leertaste: Bremse · R: rückwärts</span></span></div>
+      <div class="start-controls"><span class="mini-stick" aria-hidden="true">✥</span><span>Rechts: steuern · Links: Tempo wählen und loslassen<br><span class="muted">Pfeile / WASD · + / −: Tempo · Leertaste: Stopp · R: umkehren</span></span></div>
     </section>
 
     <div id="targetLabel" class="target-label" aria-hidden="true"><span class="target-line"></span><span>SPHÄRE / 320 m<span class="target-sub">DURCHGANG AKTIV</span></span></div>
@@ -67,13 +85,22 @@
     <div id="impact" class="impact" aria-hidden="true"></div>
 
     <div id="controls" class="controls" hidden>
+      <div class="throttle-group">
+        <label for="throttle" class="control-label">GESCHWINDIGKEIT</label>
+        <output id="throttleValue" for="throttle">+18 m/s</output>
+        <span id="throttleDirection">VORWÄRTS</span>
+        <input id="throttle" type="range" min="-18" max="18" step="1" value="18" aria-describedby="throttleHint">
+        <div class="throttle-scale" aria-hidden="true"><span>−18</span><span>0</span><span>+18</span></div>
+        <button id="stopButton" class="stop-button">■ STOPP</button>
+        <span id="throttleHint">Einstellen &amp; loslassen</span>
+      </div>
       <div class="joystick-group">
         <div id="joystick" class="joystick" role="group" aria-label="Touch-Steuerknüppel: Ziehen ändert die Flugrichtung, Loslassen hält den Kurs">
           <div class="joystick-cross" aria-hidden="true"></div><div id="stick" class="stick" aria-hidden="true"><span>✥</span></div>
         </div>
         <span class="control-label">FLUGRICHTUNG</span>
       </div>
-      <div class="brake-group"><button id="reverseButton" class="reverse-button" aria-label="Zum Rückwärtsfliegen gedrückt halten" aria-pressed="false"><span aria-hidden="true">↶</span> RÜCKWÄRTS</button><button id="brakeButton" class="brake-button" aria-label="Zum Anhalten gedrückt halten" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 7 7 5 7-5M5 12l7 5 7-5"/></svg><span>BREMSEN</span></button><span class="control-label">GEDRÜCKT HALTEN</span></div>
+
     </div>
 
     <footer class="bottom-bar">
@@ -87,14 +114,14 @@
     </footer>
 
     <div id="pauseScreen" class="overlay" hidden>
-      <section class="dialog-card" aria-labelledby="pauseTitle"><span class="eyebrow">FLUG ANGEHALTEN</span><h2 id="pauseTitle">Kurze Pause.</h2><p>Stick oder Pfeiltasten: Flugrichtung ändern.<br>Loslassen: Kurs halten. Bremse: anhalten.<br>Rückwärts-Taste oder R: zurückfliegen.<br>Du kannst wenden und die Kugel umrunden.</p><button id="resumeButton" class="primary-button">Weiterfliegen <span aria-hidden="true">↗</span></button><button id="restartPauseButton" class="text-button">Zur Startposition zurück</button></section>
+      <section class="dialog-card" aria-labelledby="pauseTitle"><span class="eyebrow">FLUG ANGEHALTEN</span><h2 id="pauseTitle">Kurze Pause.</h2><p>Rechts: Stick zum Steuern ziehen.<br>Links: Tempo von −18 bis +18 m/s wählen.<br>Minus = rückwärts, Plus = vorwärts.<br>Der Wert bleibt nach dem Loslassen erhalten.<br>Stopp oder Leertaste: auf 0 abbremsen.</p><button id="resumeButton" class="primary-button">Weiterfliegen <span aria-hidden="true">↗</span></button><button id="restartPauseButton" class="text-button">Zur Startposition zurück</button></section>
     </div>
     <div id="errorScreen" class="overlay" hidden><section class="dialog-card"><span class="eyebrow">GRAFIK PAUSIERT</span><h2 id="errorTitle">Ein neuer Anlauf.</h2><p id="errorMessage">Die 3D-Grafik konnte nicht gestartet werden. Lade die Seite in einem aktuellen Safari- oder Chrome-Browser neu.</p><button id="reloadButton" class="primary-button">Neu laden <span aria-hidden="true">↗</span></button></section></div>
     <noscript>Bitte aktiviere JavaScript, um SPHÄRE zu spielen.</noscript>
   </main>
   <script type="module">
 // SPHAERE MODULE: game-core.js
-const C=Object.freeze({sphereRadius:160,tunnelRadius:32,lip:Math.sqrt(160**2-32**2),startZ:360,shipRadius:3.25,cruise:18,reverse:9,turnRate:.9});
+const C=Object.freeze({sphereRadius:160,tunnelRadius:32,lip:Math.sqrt(160**2-32**2),startZ:360,shipRadius:3.25,cruise:18,reverse:18,turnRate:.9});
 const GATES=Object.freeze([{z:108,x:12,y:6,r:12.5},{z:54,x:-11,y:9,r:11.8},{z:0,x:-9,y:-11,r:11.8},{z:-54,x:12,y:-8,r:11.8},{z:-108,x:3,y:13,r:12.5}].map(Object.freeze));
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const qMul=(a,b)=>[a[3]*b[0]+a[0]*b[3]+a[1]*b[2]-a[2]*b[1],a[3]*b[1]-a[0]*b[2]+a[1]*b[3]+a[2]*b[0],a[3]*b[2]+a[0]*b[1]-a[1]*b[0]+a[2]*b[3],a[3]*b[3]-a[0]*b[0]-a[1]*b[1]-a[2]*b[2]];
@@ -116,7 +143,8 @@ function worldDistance(p){let d=hullDistance(p);for(const g of [...GATES,...WALL
 function surfaceNormal(distance,p){const e=.015,n=[0,1,2].map(i=>{const a=[...p],b=[...p];a[i]+=e;b[i]-=e;return distance(a)-distance(b);});const l=Math.hypot(...n);return l>1e-8?n.map(v=>v/l):[0,0,1];}
 class Flight{
  constructor(){this.reset();this.state='ready';}
- reset(){this.x=0;this.y=0;this.z=C.startZ;this.q=[0,0,0,1];this.velocity=[0,0,-C.cruise];this.turnX=0;this.turnY=0;this.elapsed=0;this.collisions=0;this.hitTimer=0;this.contacts=new Set();this.lastHits=new Map();this.gateDone=new Set();this.phase='space';this.state='flying';this.events=[];this.mission=null;this.passes=0;this.lastPass=null;this.updateBasis();}
+ reset(){this.x=0;this.y=0;this.z=C.startZ;this.q=[0,0,0,1];this.targetSpeed=this.targetSpeed??C.cruise;this.velocity=[0,0,-this.targetSpeed];this.turnX=0;this.turnY=0;this.elapsed=0;this.collisions=0;this.hitTimer=0;this.contacts=new Set();this.lastHits=new Map();this.gateDone=new Set();this.phase='space';this.state='flying';this.events=[];this.mission=null;this.passes=0;this.lastPass=null;this.updateBasis();}
+ setTargetSpeed(value){if(Number.isFinite(value))this.targetSpeed=clamp(value,-C.reverse,C.cruise);}
  updateBasis(){this.forward=qRotate(this.q,[0,0,-1]);this.up=qRotate(this.q,[0,1,0]);this.right=qRotate(this.q,[1,0,0]);}
  get position(){return[this.x,this.y,this.z];}
  get speed(){return this.velocity.reduce((s,v,i)=>s+v*this.forward[i],0);}
@@ -133,8 +161,8 @@ class Flight{
   const yaw=-this.turnX*C.turnRate*dt/2,pitch=this.turnY*C.turnRate*dt/2;
   this.q=qMul(qMul(this.q,[0,Math.sin(yaw),0,Math.cos(yaw)]),[Math.sin(pitch),0,0,Math.cos(pitch)]);
   const qLength=Math.hypot(...this.q);this.q=this.q.map(v=>v/qLength);this.updateBasis();
-  const desired=input.brake?0:input.reverse?-C.reverse:C.cruise;
-  const thrust=1-Math.exp(-dt*(input.brake?8:this.hitTimer>0?1.1:3));
+  const desired=this.targetSpeed;
+  const thrust=1-Math.exp(-dt*(this.hitTimer>0?1.1:desired===0?8:3));
   for(let i=0;i<3;i++)this.velocity[i]+=(this.forward[i]*desired-this.velocity[i])*thrust;
   let p=this.position.map((v,i)=>v+this.velocity[i]*dt);
   // Reflect the real velocity on contact; the remaining impulse produces a visible rebound.
@@ -168,7 +196,6 @@ class Flight{
  navigation(){const inside=this.phase==='tunnel',sign=this.mission?-this.mission.entry:(this.forward[2]<0?-1:1),target=inside?[0,0,sign*(C.lip+25)]:[0,0,0],vector=target.map((v,i)=>v-this.position[i]),d=Math.hypot(...vector)||1;return{inside,distance:inside?d:Math.max(0,Math.hypot(this.x,this.y,this.z)-C.sphereRadius),right:vector.reduce((s,v,i)=>s+v*this.right[i],0)/d,up:vector.reduce((s,v,i)=>s+v*this.up[i],0)/d,ahead:vector.reduce((s,v,i)=>s+v*this.forward[i],0)/d};}
  drainEvents(){return this.events.splice(0);}
 }
-
 
 // SPHAERE MODULE: renderer.js
 const TAU=Math.PI*2;
@@ -277,12 +304,11 @@ class SpaceRenderer{
  }
 }
 
-
 // SPHAERE MODULE: main.js
 const $=id=>document.getElementById(id);
 const flight=new Flight();
-let renderer,last=0,frameId=0,uiTimer=0,messageTimer=0,braking=false,reversing=false,stickPointer=null,inputX=0,inputY=0,muted=true,slowFrames=0;
-const holdPointers=new Map(),keys=new Set(),reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let renderer,last=0,frameId=0,uiTimer=0,messageTimer=0,stickPointer=null,inputX=0,inputY=0,muted=true,slowFrames=0;
+const keys=new Set(),reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let audioContext,engineOsc,engineGain;
 function audioInit(){if(audioContext){if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});return;}try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext=new Audio();engineOsc=audioContext.createOscillator();engineGain=audioContext.createGain();const filter=audioContext.createBiquadFilter();engineOsc.type='sawtooth';engineOsc.frequency.value=48;filter.type='lowpass';filter.frequency.value=130;engineGain.gain.value=0;engineOsc.connect(filter);filter.connect(engineGain);engineGain.connect(audioContext.destination);engineOsc.start();audioContext.resume().catch(()=>{});}catch{audioContext=null;}}
 function beep(freq,duration,volume=.035,type='sine'){if(muted||!audioContext)return;const o=audioContext.createOscillator(),g=audioContext.createGain(),now=audioContext.currentTime;o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(freq*.6,now+duration);g.gain.setValueAtTime(volume,now);g.gain.exponentialRampToValueAtTime(.001,now+duration);o.connect(g);g.connect(audioContext.destination);o.start();o.stop(now+duration);}
@@ -290,16 +316,15 @@ function engineAudio(){if(!engineGain)return;const active=!muted&&flight.state==
 function message(text,seconds=3){$('flightMessage').textContent=text;$('flightMessage').classList.add('visible');messageTimer=seconds;}
 
 function clearInput(){
- keys.clear();inputX=0;inputY=0;braking=false;reversing=false;stickPointer=null;holdPointers.clear();
+ keys.clear();inputX=0;inputY=0;stickPointer=null;
  $('stick').style.transform='translate(0px,0px)';$('joystick').classList.remove('active');
- for(const id of ['brakeButton','reverseButton']){$(id).classList.remove('active');$(id).setAttribute('aria-pressed','false');}
 }
 function begin(){
  flight.reset();clearInput();last=performance.now();$('game').classList.add('playing');
  for(const id of ['startScreen','targetLabel','startFootnote','pauseScreen'])$(id).hidden=true;
  for(const id of ['telemetry','pauseButton','controls','journey','reticle','passengerCard'])$(id).hidden=false;
  $('collisionCount').parentElement.classList.remove('hit');audioInit();
- message('Stick: Flugrichtung ändern · Loslassen: Kurs halten',5);
+ message('Rechts: steuern · Links: Tempo wählen und loslassen',5);
  $('pauseButton').focus({preventScroll:true});updateUI();
 }
 function pause(){if(flight.state!=='flying')return;flight.pause();clearInput();$('pauseScreen').hidden=false;$('phaseLabel').textContent='PAUSE';$('resumeButton').focus({preventScroll:true});engineAudio();}
@@ -310,8 +335,9 @@ function updateUI(){
  $('collisionCount').textContent=String(flight.collisions).padStart(2,'0');
  $('collisionCount').parentElement.classList.toggle('hit',flight.hitTimer>0);
  $('cleanLabel').textContent=flight.hitTimer>0?'Abgeprallt!':flight.collisions===0?'Sauberer Flug':'Weiter geht’s';
- $('speedValue').textContent=Math.round(flight.totalSpeed);
- $('speedLabel').textContent=braking||keys.has('Space')?'Bremsen':flight.totalSpeed<.3?'Stillstand':reversing||keys.has('KeyR')?'Rückwärts':flight.speed<-1?'Rückwärtsdrift':'Vorwärts';
+ $('speedValue').textContent=Math.round(flight.speed);
+ $('speedLabel').textContent=flight.totalSpeed<.3?'Stillstand':flight.speed<-.3?'Rückwärts':flight.speed>.3?'Vorwärts':'Seitwärtsdrift';
+ syncThrottle();
  const nav=flight.navigation(),arrow=$('navArrow');
  let angle=0,glyph='↑',label=nav.inside?'Tunnelausgang':'Kugel';
  if(nav.ahead>.985){glyph='⊙';label+=' voraus';}
@@ -342,7 +368,7 @@ function animate(now){
  if(flight.state==='flying'){
   const x=inputX+(keys.has('ArrowRight')||keys.has('KeyD')?1:0)-(keys.has('ArrowLeft')||keys.has('KeyA')?1:0);
   const y=inputY+(keys.has('ArrowUp')||keys.has('KeyW')?1:0)-(keys.has('ArrowDown')||keys.has('KeyS')?1:0);
-  flight.update(dt,{x,y,brake:braking||keys.has('Space'),reverse:reversing||keys.has('KeyR')});
+  flight.update(dt,{x,y});
   handleEvents();uiTimer+=dt;if(uiTimer>.07){updateUI();engineAudio();uiTimer=0;}
   if(messageTimer>0){messageTimer-=dt;if(messageTimer<=0)$('flightMessage').classList.remove('visible');}
  }
@@ -358,19 +384,20 @@ $('joystick').addEventListener('pointerdown',e=>{if(flight.state!=='flying'||sti
 $('joystick').addEventListener('pointermove',e=>{if(e.pointerId!==stickPointer)return;e.preventDefault();moveStick(e);},{passive:false});
 function releaseStick(e){if(e.pointerId!==stickPointer)return;stickPointer=null;inputX=0;inputY=0;$('stick').style.transform='translate(0px,0px)';$('joystick').classList.remove('active');}
 for(const type of ['pointerup','pointercancel','lostpointercapture'])$('joystick').addEventListener(type,releaseStick);
-function setHeld(id,value){if(id==='brakeButton')braking=value;else reversing=value;$(id).classList.toggle('active',value);$(id).setAttribute('aria-pressed',String(value));}
-for(const id of ['brakeButton','reverseButton']){
- const button=$(id);
- button.addEventListener('pointerdown',e=>{if(flight.state!=='flying'||holdPointers.has(id))return;e.preventDefault();holdPointers.set(id,e.pointerId);button.setPointerCapture(e.pointerId);setHeld(id,true);},{passive:false});
- const release=e=>{if(holdPointers.get(id)!==e.pointerId)return;holdPointers.delete(id);setHeld(id,false);};
- for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,release);
- button.addEventListener('keydown',e=>{if(['Enter','Space'].includes(e.code)&&flight.state==='flying'){e.preventDefault();e.stopPropagation();setHeld(id,true);}});
- button.addEventListener('keyup',e=>{if(['Enter','Space'].includes(e.code)){e.preventDefault();e.stopPropagation();setHeld(id,false);}});
- button.addEventListener('blur',()=>{if(!holdPointers.has(id))setHeld(id,false);});
+function syncThrottle(){
+ const value=flight.targetSpeed,formatted=(value>0?'+':'')+value+' m/s';
+ $('throttle').value=String(value);$('throttleValue').textContent=formatted;
+ $('throttle').setAttribute('aria-valuetext',value===0?'Stillstand':Math.abs(value)+' Meter pro Sekunde '+(value>0?'vorwärts':'rückwärts'));
+ $('throttleDirection').textContent=value===0?'STILLSTAND':value>0?'VORWÄRTS':'RÜCKWÄRTS';
 }
+function changeSpeed(value){if(flight.state!=='flying')return;flight.setTargetSpeed(value);syncThrottle();}
+$('throttle').addEventListener('input',e=>changeSpeed(Number(e.target.value)));
+$('throttle').addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','PageUp','PageDown'].includes(e.code))e.stopPropagation();});
+$('stopButton').addEventListener('click',()=>changeSpeed(0));
 document.addEventListener('keydown',e=>{
  if(e.code==='Escape'||e.code==='KeyP'){e.preventDefault();if(!e.repeat){if(flight.state==='flying')pause();else if(flight.state==='paused')resume();}return;}
- if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD','Space','KeyR'].includes(e.code)&&flight.state==='flying'){e.preventDefault();keys.add(e.code);}
+ if(flight.state==='flying'&&['Space','KeyR','Equal','Minus','NumpadAdd','NumpadSubtract'].includes(e.code)){e.preventDefault();if(e.code==='Space')changeSpeed(0);else if(e.code==='KeyR'){if(!e.repeat)changeSpeed(-(flight.targetSpeed||C.cruise));}else changeSpeed(flight.targetSpeed+(['Equal','NumpadAdd'].includes(e.code)?1:-1));return;}
+ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD'].includes(e.code)&&flight.state==='flying'){e.preventDefault();keys.add(e.code);}
 });
 document.addEventListener('keyup',e=>keys.delete(e.code));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();last=performance.now();});
@@ -387,6 +414,6 @@ function graphicsError(text){cancelAnimationFrame(frameId);pause();$('pauseScree
 $('space').addEventListener('webglcontextlost',e=>{e.preventDefault();graphicsError('Die Grafikverbindung wurde unterbrochen. Lade das Spiel neu, um wieder zu starten.');});
 try{renderer=new SpaceRenderer($('space'));last=performance.now();frameId=requestAnimationFrame(animate);}catch(error){console.error(error);graphicsError();}
 
-  </script>
+</script>
 </body>
 </html>
