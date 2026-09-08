@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover">
+  <meta name="theme-color" content="#070b13">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Steuere dein Raumschiff durch einen Tunnel in einer gewaltigen Kugel. Ein 3D-Spiel für iPad, Touchscreen und Tastatur.">
+  <title>SPHÄRE · Tunnelflug</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23070b13'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%23d7fca1' stroke-width='7'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23d7fca1'/%3E%3C/svg%3E">
+  <style>
+:root{color-scheme:dark;--bg:#070b13;--text:#f0f3ee;--muted:#929d9f;--lime:#d7fca1;--cyan:#88d9d0;--line:rgba(199,225,222,.18);font-family:Arial,Helvetica,sans-serif;font-size:16px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);overscroll-behavior:none}body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible{outline:3px solid var(--lime);outline-offset:6px}button:disabled{opacity:.4;cursor:default}[hidden]{display:none!important}#game{position:relative;width:100%;height:100%;height:100dvh;min-height:320px;overflow:hidden;isolation:isolate}#space{position:absolute;inset:0;width:100%;height:100%;touch-action:none}.vignette{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(4,9,14,.62),transparent 53%),linear-gradient(0deg,rgba(3,8,13,.9),transparent 26%,transparent 80%,rgba(3,8,13,.35));z-index:1}.playing .vignette{background:linear-gradient(0deg,rgba(3,8,13,.8),transparent 25%,transparent 84%,rgba(3,8,13,.45))}.topbar{position:absolute;left:0;top:0;width:100%;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:max(26px,env(safe-area-inset-top)) max(34px,env(safe-area-inset-right)) 20px max(34px,env(safe-area-inset-left))}.brand{display:flex;align-items:center;gap:11px;font-weight:600;font-size:1.25rem;letter-spacing:.22em}.brand-icon{color:var(--lime);font-size:2.45rem;font-weight:400;line-height:1;letter-spacing:0}.brand-caption{display:block;font:12px/1.8 Arial,sans-serif;letter-spacing:.36em;color:var(--muted)}.flight-status{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font:12px/1.2 'Courier New',monospace;letter-spacing:.13em;color:#c4cfcd;white-space:nowrap}.status-dot{height:5px;width:5px;border-radius:50%;background:var(--lime);box-shadow:0 0 9px #d7fca160}.toolbar{display:flex;gap:9px}.icon-button{width:45px;height:45px;display:grid;place-items:center;background:rgba(9,18,24,.45);border:1px solid var(--line);border-radius:50%;backdrop-filter:blur(8px)}.icon-button:hover{background:rgba(115,144,143,.2)}.icon-button svg{width:20px;height:20px}.start-screen{position:absolute;left:7%;top:50%;transform:translateY(-46%);z-index:3;max-width:470px}.eyebrow{color:var(--lime);font:12px/1.5 'Courier New',monospace;letter-spacing:.2em;display:flex;align-items:center;gap:12px}.short-line{height:1px;width:29px;background:var(--lime)}h1{font-size:clamp(3.6rem,6.3vw,6.8rem);line-height:.99;letter-spacing:-.063em;font-weight:500;margin:22px 0 24px}p{font-size:1rem;line-height:1.7;color:#b5c0c1;margin:0 0 25px}.primary-button{min-height:56px;min-width:235px;display:flex;align-items:center;justify-content:space-between;gap:35px;border:0;border-radius:6px;padding:16px 22px;background:var(--lime);color:#132019;font-weight:600;font-size:1rem;transition:background .15s,transform .15s}.primary-button:hover{background:#e6ffc2}.primary-button:active{transform:scale(.98)}.primary-button>span{font-size:1.5rem;line-height:1;font-weight:400}.start-controls{display:flex;align-items:center;gap:13px;font-size:.875rem;line-height:1.7;color:#bdc7c6;margin-top:29px}.mini-stick{height:35px;width:35px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:#d2dddc;font-size:1.4rem}.muted{color:var(--muted);font-size:.75rem}.target-label{position:absolute;top:36%;left:78%;z-index:2;display:flex;align-items:center;gap:10px;font:12px/1.7 'Courier New',monospace;letter-spacing:.1em;white-space:nowrap;color:#e0e6dc}.target-line{height:1px;width:38px;background:#a5bfba70;transform:rotate(-30deg);transform-origin:right}.target-sub{display:block;color:#89a9a5;font-size:12px}.bottom-bar{position:absolute;bottom:max(27px,env(safe-area-inset-bottom));left:max(34px,env(safe-area-inset-left));right:max(34px,env(safe-area-inset-right));display:flex;justify-content:space-between;align-items:end;z-index:3;pointer-events:none}.start-footnote,.orientation-note{font:12px/1.5 'Courier New',monospace;letter-spacing:.1em;color:#94a29f}.start-footnote span{padding:0 15px;color:#53635f}.orientation-note{letter-spacing:0}.telemetry{position:absolute;z-index:3;top:112px;left:max(35px,env(safe-area-inset-left));right:max(35px,env(safe-area-inset-right));display:flex;justify-content:space-between;pointer-events:none}.stat{display:flex;flex-direction:column;gap:7px}.stat-label{font:12px/1.5 'Courier New',monospace;letter-spacing:.16em;color:#b2c6c3}.stat strong{font-size:3rem;line-height:1;font-weight:400;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.stat-note{color:var(--cyan);font-size:.75rem}.speed-stat{text-align:right}.unit{font:12px 'Courier New',monospace;color:var(--muted);margin-left:8px}.reticle{position:absolute;z-index:2;pointer-events:none;left:50%;top:47%;width:30px;height:30px;transform:translate(-50%,-50%);border:1px solid #a4d5c533;border-radius:50%}.reticle:before,.reticle:after{content:'';position:absolute;background:#cae8db77}.reticle:before{height:1px;width:8px;left:10px;top:14px}.reticle:after{width:1px;height:8px;top:10px;left:14px}.flight-message{position:absolute;z-index:3;left:50%;top:24%;transform:translateX(-50%);color:var(--lime);font:13px/1.5 'Courier New',monospace;letter-spacing:.1em;text-align:center;pointer-events:none;text-shadow:0 2px 8px #000;transition:opacity .25s;opacity:0;max-width:70%;width:max-content}.flight-message.visible{opacity:1}.controls{position:absolute;left:max(38px,env(safe-area-inset-left));right:max(38px,env(safe-area-inset-right));bottom:max(66px,calc(env(safe-area-inset-bottom) + 36px));z-index:4;display:flex;align-items:end;justify-content:space-between;pointer-events:none}.joystick-group,.brake-group{display:flex;flex-direction:column;align-items:center;gap:15px}.joystick{height:132px;width:132px;border-radius:50%;border:1px solid rgba(170,208,202,.3);background:radial-gradient(circle,rgba(52,87,80,.19) 0,rgba(25,47,45,.18) 68%,rgba(165,215,193,.06) 69%);position:relative;pointer-events:auto;touch-action:none}.joystick:before{content:'';position:absolute;inset:16px;border:1px dashed #a8d0be25;border-radius:50%}.joystick-cross{position:absolute;inset:0;opacity:.22;background:linear-gradient(90deg,transparent calc(50% - .5px),#99bdae 50%,transparent calc(50% + .5px)),linear-gradient(0deg,transparent calc(50% - .5px),#99bdae 50%,transparent calc(50% + .5px));border-radius:50%}.stick{position:absolute;left:50%;top:50%;width:55px;height:55px;margin:-27.5px;display:grid;place-items:center;border-radius:50%;border:1px solid #cde5d860;background:rgba(133,175,157,.2);box-shadow:0 3px 15px #0003;color:#cee5db;will-change:transform;font-size:1.6rem;pointer-events:none}.joystick.active{border-color:var(--lime)}.joystick.active .stick{background:rgba(172,207,142,.28);border-color:var(--lime);color:var(--lime)}.control-label{font:12px 'Courier New',monospace;letter-spacing:.15em;color:#8faba5}.brake-button{border:1px solid #b8d4cd44;width:105px;height:105px;border-radius:50%;background:rgba(33,52,49,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;pointer-events:auto;touch-action:none;backdrop-filter:blur(4px)}.brake-button svg{height:26px;width:26px;color:var(--lime)}.brake-button span{font:12px 'Courier New',monospace;letter-spacing:.09em;color:#c6d4ce}.brake-button.active{border-color:var(--lime);background:#d7fca125}.journey{width:min(360px,38vw);position:absolute;left:50%;bottom:4px;transform:translateX(-50%)}.journey-labels{display:flex;justify-content:space-between;font:12px 'Courier New',monospace;letter-spacing:.12em;color:#b5c7c0}.journey-track{position:relative;margin:12px 0;height:2px;background:#d2e0d333}.tunnel-range{position:absolute;left:30.2%;right:23.7%;height:10px;top:-4px;background:#b3d6bb12;border-left:1px solid #b7d5b844;border-right:1px solid #b7d5b844}.journey-fill{height:2px;background:var(--lime);width:0}.journey-ship{position:absolute;top:-7px;margin-left:-4px;color:var(--lime);font-size:12px;line-height:16px}.journey-detail{display:flex;justify-content:space-between;font:12px 'Courier New',monospace;color:#7e9b91;letter-spacing:.05em}.impact{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;background:radial-gradient(ellipse,transparent 25%,rgba(255,108,46,.65));box-shadow:inset 0 0 60px #fe753355}.impact.flash{animation:impact .5s ease-out}.stat.hit strong{color:#ffb77c}@keyframes impact{0%{opacity:.8}100%{opacity:0}}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:8;background:#02070cb5;backdrop-filter:blur(12px);padding:25px;overflow:auto}.dialog-card{width:min(460px,100%);padding:40px;background:rgba(10,20,26,.92);border:1px solid #d1e2d32b;border-radius:13px;box-shadow:0 25px 100px #0004}.dialog-card h2{font-size:clamp(2.5rem,5vw,3.65rem);font-weight:400;line-height:1.05;letter-spacing:-.055em;margin:23px 0}.dialog-card p{font-size:1rem}.dialog-card .primary-button{width:100%}.text-button{display:block;margin:18px auto 0;background:none;border:0;color:#aabcb5;padding:12px}.results{display:flex;gap:50px;padding:4px 0 30px}.results>div{display:flex;flex-direction:column;gap:9px}.results strong{font-size:2.8rem;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-.04em}.results span{color:#92aaa0;font-size:.875rem}.result-overlay{background:linear-gradient(90deg,#02070cdd,#02070c22);backdrop-filter:blur(2px);justify-content:flex-start;padding-left:8%}.result-overlay .dialog-card{background:#0a141bd1}.playing .orientation-note{display:none}
+@media(min-width:1500px){.start-screen{left:9%}h1{font-size:6.8rem}.controls{bottom:83px}.joystick{width:150px;height:150px}.brake-button{width:116px;height:116px}}
+@media(max-width:900px){.target-label{left:77%;font-size:12px}.target-line{width:22px}.target-sub{font-size:12px}.start-screen{left:6%}.topbar{padding:24px}.bottom-bar{left:24px;right:24px}.telemetry{left:25px;right:25px;top:100px}.controls{left:25px;right:25px}}
+@media(orientation:portrait){.start-screen{top:auto;bottom:95px;transform:none;left:7%}h1{font-size:clamp(3.5rem,10vw,5rem);margin:16px 0}.start-screen p{line-height:1.55;margin-bottom:21px}.start-controls{margin-top:20px}.vignette{background:linear-gradient(0deg,#050a10 3%,#050a10ed 28%,#050a1055 57%,transparent 75%)}.target-label{top:25%;left:auto;right:8%}.topbar .flight-status{display:none}.playing .flight-status{display:flex;top:95px;font-size:12px}.telemetry{top:137px}.flight-message{top:29%;max-width:80%;font-size:12px}.journey{width:65vw;bottom:-6px}.controls{bottom:max(108px,calc(env(safe-area-inset-bottom) + 90px))}.orientation-note{font-size:12px}.start-footnote{font-size:12px;max-width:42%}.start-footnote span{padding:0 6px}.result-overlay{padding:22px;justify-content:center;background:#02070c88}.dialog-card{padding:30px}.reticle{top:43%}}
+@media(max-height:620px) and (orientation:landscape){.topbar{padding:15px 25px}.brand{font-size:1.1rem}.brand-icon{font-size:2rem}.brand-caption{font-size:12px}.icon-button{width:40px;height:40px}.start-screen{top:49%;left:6%}h1{font-size:3.5rem;margin:13px 0 15px}.start-screen p{font-size:.875rem;line-height:1.5;margin-bottom:16px}.primary-button{min-height:49px;padding:13px 20px}.start-controls{margin-top:13px;font-size:.75rem;line-height:1.4}.start-controls .muted{font-size:.75rem}.eyebrow{font-size:12px}.bottom-bar{bottom:18px}.controls{bottom:50px;left:24px;right:24px}.joystick{width:105px;height:105px}.stick{width:47px;height:47px;margin:-23.5px}.brake-button{width:85px;height:85px}.joystick-group,.brake-group{gap:9px}.telemetry{top:80px}.stat strong{font-size:2.2rem}.stat-label{font-size:12px}.stat-note{font-size:12px}.flight-message{top:22%;font-size:12px}.journey{width:32vw;bottom:0}.dialog-card{padding:22px 30px;max-width:400px}.dialog-card h2{font-size:2.5rem;margin:15px 0}.dialog-card p{margin-bottom:15px}.results{padding-bottom:18px}.results strong{font-size:2.2rem}.target-label{top:31%}.text-button{margin-top:5px}}
+@media(prefers-reduced-motion:reduce){button,.flight-message{transition:none}}
+
+  </style>
+</head>
+<body>
+  <main id="game" aria-label="SPHÄRE Weltraumspiel">
+    <canvas id="space" aria-label="Dreidimensionaler Flug durch eine Raumkugel"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">◉</span><span>SPHÄRE<span class="brand-caption">TUNNELFLUG</span></span></div>
+      <div class="flight-status"><span class="status-dot"></span><span id="phaseLabel">FLUG BEREIT</span></div>
+      <div class="toolbar">
+        <button id="soundButton" class="icon-button" aria-label="Ton einschalten" aria-pressed="false" title="Ton einschalten">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="soundWaves" d="m16 9 5 6m0-6-5 6"/></svg>
+        </button>
+        <button id="pauseButton" class="icon-button" aria-label="Spiel pausieren" title="Pause" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="telemetry" class="telemetry" hidden>
+      <div class="stat"><span class="stat-label">KOLLISIONEN</span><strong id="collisionCount">00</strong><span id="cleanLabel" class="stat-note">Sauberer Flug</span></div>
+      <div class="stat speed-stat"><span class="stat-label">TEMPO</span><div><strong id="speedValue">18</strong><span class="unit">m/s</span></div><span id="speedLabel" class="stat-note">Reiseflug</span></div>
+    </div>
+
+    <section id="startScreen" class="start-screen" aria-labelledby="gameTitle">
+      <div class="eyebrow"><span class="short-line"></span>MISSION 01</div>
+      <h1 id="gameTitle">Mitten<br>hindurch.</h1>
+      <p>Eine gewaltige Kugel. Ein Tunnel.<br>Bring dein Schiff mit möglichst wenigen<br class="wide-only"> Kollisionen auf die andere Seite.</p>
+      <button id="startButton" class="primary-button">Flug starten <span aria-hidden="true">↗</span></button>
+      <div class="start-controls"><span class="mini-stick" aria-hidden="true">✥</span><span>Touch-Stick zum Steuern<br><span class="muted">Pfeiltasten oder WASD am Computer</span></span></div>
+    </section>
+
+    <div id="targetLabel" class="target-label" aria-hidden="true"><span class="target-line"></span><span>SPHÄRE / 320 m<span class="target-sub">DURCHGANG AKTIV</span></span></div>
+    <div id="reticle" class="reticle" aria-hidden="true" hidden><i></i></div>
+    <div id="flightMessage" class="flight-message" role="status" aria-live="polite"></div>
+    <div id="impact" class="impact" aria-hidden="true"></div>
+
+    <div id="controls" class="controls" hidden>
+      <div class="joystick-group">
+        <div id="joystick" class="joystick" role="group" aria-label="Touch-Steuerknüppel: Ziehen zum Steuern">
+          <div class="joystick-cross" aria-hidden="true"></div><div id="stick" class="stick" aria-hidden="true"><span>✥</span></div>
+        </div>
+        <span class="control-label">STEUERN</span>
+      </div>
+      <div class="brake-group"><button id="brakeButton" class="brake-button" aria-label="Zum Bremsen gedrückt halten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m5 7 7 5 7-5M5 12l7 5 7-5"/></svg><span>BREMSEN</span></button><span class="control-label">GEDRÜCKT HALTEN</span></div>
+    </div>
+
+    <footer class="bottom-bar">
+      <div id="startFootnote" class="start-footnote">01 <span>/</span> AUF DIE ANDERE SEITE</div>
+      <div id="journey" class="journey" hidden>
+        <div class="journey-labels"><span>ANFLUG</span><span>TUNNEL</span><span>FREIES ALL</span></div>
+        <div class="journey-track"><div class="tunnel-range"></div><div id="journeyFill" class="journey-fill"></div><div id="journeyShip" class="journey-ship">◆</div></div>
+        <div class="journey-detail"><span id="distanceLabel">Zum Eingang</span><span id="distanceValue">203 m</span></div>
+      </div>
+      <span id="orientationNote" class="orientation-note">Am besten im Querformat</span>
+    </footer>
+
+    <div id="pauseScreen" class="overlay" hidden>
+      <section class="dialog-card" aria-labelledby="pauseTitle"><span class="eyebrow">FLUG ANGEHALTEN</span><h2 id="pauseTitle">Kurze Pause.</h2><p>Dein Schiff wartet auf dich.</p><button id="resumeButton" class="primary-button">Weiterfliegen <span aria-hidden="true">↗</span></button><button id="restartPauseButton" class="text-button">Von vorne starten</button></section>
+    </div>
+    <div id="resultScreen" class="overlay result-overlay" hidden>
+      <section class="dialog-card" aria-labelledby="resultTitle"><span class="eyebrow">MISSION GESCHAFFT</span><h2 id="resultTitle">Wieder im<br>freien All.</h2><p id="resultMessage">Die Kugel liegt hinter dir.</p><div class="results"><div><strong id="resultCollisions">0</strong><span>Kollisionen</span></div><div><strong id="resultTime">0:00</strong><span>Flugzeit</span></div></div><button id="replayButton" class="primary-button">Noch ein Flug <span aria-hidden="true">↗</span></button></section>
+    </div>
+    <div id="errorScreen" class="overlay" hidden><section class="dialog-card"><span class="eyebrow">GRAFIK PAUSIERT</span><h2 id="errorTitle">Ein neuer Anlauf.</h2><p id="errorMessage">Die 3D-Grafik konnte nicht gestartet werden. Lade die Seite in einem aktuellen Safari- oder Chrome-Browser neu.</p><button id="reloadButton" class="primary-button">Neu laden <span aria-hidden="true">↗</span></button></section></div>
+    <noscript>Bitte aktiviere JavaScript, um SPHÄRE zu spielen.</noscript>
+  </main>
+  <script type="module">
+const C = Object.freeze({ sphereRadius:160, tunnelRadius:32, lip:Math.sqrt(160**2-32**2), startZ:360, finishZ:-320, shipRadius:3.25, cruise:18, brake:8, steer:17 });
+const GATES = Object.freeze([
+  {z:108,x:12,y:6,r:12.5},
+  {z:54,x:-11,y:9,r:11.8},
+  {z:0,x:-9,y:-11,r:11.8},
+  {z:-54,x:12,y:-8,r:11.8},
+  {z:-108,x:3,y:13,r:12.5},
+].map(Object.freeze));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+class Flight {
+  constructor(){this.reset();this.state='ready';}
+  reset(){this.x=0;this.y=0;this.z=C.startZ;this.vx=0;this.vy=0;this.speed=C.cruise;this.elapsed=0;this.collisions=0;this.hitTimer=0;this.wallContact=false;this.gateDone=new Set();this.phase='approach';this.state='flying';this.events=[];}
+  pause(){if(this.state==='flying'){this.state='paused';this.events.push({type:'pause'});}}
+  resume(){if(this.state==='paused')this.state='flying';}
+  hit(kind){this.collisions++;this.hitTimer=.65;this.events.push({type:'hit',kind,count:this.collisions});}
+  update(dt,input={}){
+    if(this.state!=='flying'||!Number.isFinite(dt)||dt<=0)return;
+    // Small fixed substeps keep walls and gate planes solid during a slow frame.
+    let remaining=Math.min(dt,.25);
+    while(remaining>0&&this.state==='flying'){const step=Math.min(remaining,1/120);this.step(step,input);remaining-=step;}
+  }
+  step(dt,input){
+    const old={x:this.x,y:this.y,z:this.z};
+    this.elapsed+=dt;this.hitTimer=Math.max(0,this.hitTimer-dt);
+    let ix=clamp(input.x||0,-1,1),iy=clamp(input.y||0,-1,1);const len=Math.hypot(ix,iy);if(len>1){ix/=len;iy/=len;}
+    const response=1-Math.exp(-11*dt);
+    this.vx+=(ix*C.steer-this.vx)*response;this.vy+=(iy*C.steer-this.vy)*response;
+    this.x+=this.vx*dt;this.y+=this.vy*dt;
+    const desired=(input.brake?C.brake:C.cruise)*(this.hitTimer>0?.62:1);
+    this.speed+=(desired-this.speed)*(1-Math.exp(-6*dt));this.z-=this.speed*dt;
+    // The outer hull has a real, continuous bore. Contact funnels the ship into it.
+    const wallZone=this.z<C.lip+C.shipRadius&&this.z>-C.lip-C.shipRadius;
+    const distance=Math.hypot(this.x,this.y),limit=C.tunnelRadius-C.shipRadius;
+    if(wallZone&&distance>=limit){
+      if(!this.wallContact)this.hit('wall');
+      this.wallContact=true;const nx=this.x/distance,ny=this.y/distance;
+      this.x=nx*limit;this.y=ny*limit;
+      const outward=this.vx*nx+this.vy*ny;if(outward>0){this.vx-=outward*nx;this.vy-=outward*ny;}
+    }else if(!wallZone||distance<limit-.5)this.wallContact=false;
+    // A swept intersection counts each obstacle once, including at low frame rates.
+    for(let i=0;i<GATES.length;i++){
+      if(this.gateDone.has(i))continue;
+      const gate=GATES[i],plane=gate.z+C.shipRadius+1;
+      if(old.z>=plane&&this.z<plane){
+        const t=clamp((old.z-plane)/(old.z-this.z),0,1);
+        const px=old.x+(this.x-old.x)*t,py=old.y+(this.y-old.y)*t;
+        this.gateDone.add(i);
+        if(Math.hypot(px-gate.x,py-gate.y)>gate.r-C.shipRadius){
+          this.hit('gate');this.vx+=(gate.x-this.x)*.7;this.vy+=(gate.y-this.y)*.7;
+        }else this.events.push({type:'gate',index:i});
+      }
+    }
+    // Keep the initial approach within view and allow room to steer after exiting.
+    if(!wallZone){this.x=clamp(this.x,-65,65);this.y=clamp(this.y,-55,55);}
+    const phase=this.z>C.lip?'approach':this.z>-C.lip?'tunnel':'departure';
+    if(phase!==this.phase){this.phase=phase;this.events.push({type:'phase',phase});}
+    if(this.z<=C.finishZ){this.z=C.finishZ;this.state='finished';this.events.push({type:'finish'});}
+  }
+  get progress(){return clamp((C.startZ-this.z)/(C.startZ-C.finishZ),0,1);}
+  get nextGate(){return GATES.find((g,i)=>!this.gateDone.has(i))||null;}
+  drainEvents(){return this.events.splice(0);}
+}
+
+
+const TAU=Math.PI*2;
+const identity=()=>new Float32Array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
+const norm=v=>{const l=Math.hypot(...v)||1;return v.map(x=>x/l);};
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+function multiply(a,b){const o=new Float32Array(16);for(let col=0;col<4;col++)for(let row=0;row<4;row++)for(let k=0;k<4;k++)o[col*4+row]+=a[k*4+row]*b[col*4+k];return o;}
+function perspective(fov,aspect,near,far){const f=1/Math.tan(fov/2),o=new Float32Array(16);o[0]=f/aspect;o[5]=f;o[10]=(far+near)/(near-far);o[11]=-1;o[14]=2*far*near/(near-far);return o;}
+function lookAt(eye,target){const z=norm(eye.map((x,i)=>x-target[i])),x=norm(cross([0,1,0],z)),y=cross(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1]);}
+function model(x=0,y=0,z=0,roll=0,pitch=0,scale=1){const c=Math.cos(roll),s=Math.sin(roll),cp=Math.cos(pitch),sp=Math.sin(pitch);return new Float32Array([c*scale,s*scale,0,0,-s*cp*scale,c*cp*scale,sp*scale,0,s*sp*scale,-c*sp*scale,cp*scale,0,x,y,z,1]);}
+class Geometry{
+  constructor(){this.p=[];this.n=[];}
+  vertex(p,n){this.p.push(...p);this.n.push(...n);}
+  tri(a,b,c,normal){const n=normal||norm(cross(b.map((x,i)=>x-a[i]),c.map((x,i)=>x-a[i])));this.vertex(a,n);this.vertex(b,n);this.vertex(c,n);}
+  quad(a,b,c,d,n){this.tri(a,b,c,n);this.tri(a,c,d,n);}
+  line(a,b){this.vertex(a,[0,0,1]);this.vertex(b,[0,0,1]);}
+}
+function sphereShell(){const g=new Geometry(),rows=56,cols=112,min=Math.asin(C.tunnelRadius/C.sphereRadius),max=Math.PI-min;
+ const point=(p,a)=>[C.sphereRadius*Math.sin(p)*Math.cos(a),C.sphereRadius*Math.sin(p)*Math.sin(a),C.sphereRadius*Math.cos(p)];
+ for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+   const p0=min+(max-min)*j/rows,p1=min+(max-min)*(j+1)/rows,a=i/cols*TAU,b=(i+1)/cols*TAU;
+   const q=[point(p0,a),point(p1,a),point(p1,b),point(p0,b)];for(const k of [0,1,2,0,2,3])g.vertex(q[k],q[k].map(x=>x/C.sphereRadius));
+ }return g;
+}
+function cylinder(radius,z0,z1,inward=false){const g=new Geometry();for(let i=0;i<96;i++){const a=i/96*TAU,b=(i+1)/96*TAU,na=[Math.cos(a),Math.sin(a),0],nb=[Math.cos(b),Math.sin(b),0],q=[[na[0]*radius,na[1]*radius,z0],[nb[0]*radius,nb[1]*radius,z0],[nb[0]*radius,nb[1]*radius,z1],[na[0]*radius,na[1]*radius,z1]];for(const k of [0,1,2,0,2,3])g.vertex(q[k],(k===0||k===3?na:nb).map(x=>inward?-x:x));}return g;}
+function annulus(cx,cy,inner,outer,z,depth=0){const g=new Geometry();for(let i=0;i<96;i++){
+ const a=i/96*TAU,b=(i+1)/96*TAU;const p=(r,t,zz,inside)=>[Math.cos(t)*r+(inside?cx:0),Math.sin(t)*r+(inside?cy:0),zz];
+ const ia=p(inner,a,z+depth/2,true),ib=p(inner,b,z+depth/2,true),oa=p(outer,a,z+depth/2,false),ob=p(outer,b,z+depth/2,false);
+ g.quad(oa,ob,ib,ia,[0,0,1]);
+ if(depth){const iab=p(inner,a,z-depth/2,true),ibb=p(inner,b,z-depth/2,true),oab=p(outer,a,z-depth/2,false),obb=p(outer,b,z-depth/2,false);g.quad(obb,oab,iab,ibb,[0,0,-1]);g.quad(ia,ib,ibb,iab,[-Math.cos((a+b)/2),-Math.sin((a+b)/2),0]);}
+ }return g;}
+function ring(cx,cy,r,thickness,z){const g=new Geometry();for(let i=0;i<112;i++){const a=i/112*TAU,b=(i+1)/112*TAU,p=(rr,t)=>[cx+Math.cos(t)*rr,cy+Math.sin(t)*rr,z];g.quad(p(r,a),p(r,b),p(r+thickness,b),p(r+thickness,a),[0,0,1]);}return g;}
+function surfaceLines(){const g=new Geometry(),R=C.sphereRadius+.09,low=Math.asin(C.tunnelRadius/R);
+ for(let j=1;j<22;j++){const p=low+(Math.PI-2*low)*j/22;for(let i=0;i<112;i++){const a=i/112*TAU,b=(i+1)/112*TAU;g.line([R*Math.sin(p)*Math.cos(a),R*Math.sin(p)*Math.sin(a),R*Math.cos(p)],[R*Math.sin(p)*Math.cos(b),R*Math.sin(p)*Math.sin(b),R*Math.cos(p)]);}}
+ for(let i=0;i<36;i++){const a=i/36*TAU;for(let j=0;j<80;j++){const p=low+(Math.PI-2*low)*j/80,q=low+(Math.PI-2*low)*(j+1)/80;g.line([R*Math.sin(p)*Math.cos(a),R*Math.sin(p)*Math.sin(a),R*Math.cos(p)],[R*Math.sin(q)*Math.cos(a),R*Math.sin(q)*Math.sin(a),R*Math.cos(q)]);}}
+ return g;
+}
+function tunnelLines(){const g=new Geometry();for(let i=0;i<16;i++){const a=i/16*TAU,x=Math.cos(a)*31.94,y=Math.sin(a)*31.94;g.line([x,y,C.lip],[x,y,-C.lip]);}for(let z=-150;z<=150;z+=12)for(let i=0;i<96;i++){const a=i/96*TAU,b=(i+1)/96*TAU;g.line([Math.cos(a)*31.94,Math.sin(a)*31.94,z],[Math.cos(b)*31.94,Math.sin(b)*31.94,z]);}return g;}
+function rails(){const g=new Geometry();for(let i=0;i<8;i++){const a=i/8*TAU,w=.011,r=31.8;for(let z=-151;z<150;z+=13){g.quad([Math.cos(a-w)*r,Math.sin(a-w)*r,z],[Math.cos(a+w)*r,Math.sin(a+w)*r,z],[Math.cos(a+w)*r,Math.sin(a+w)*r,z+7],[Math.cos(a-w)*r,Math.sin(a-w)*r,z+7],[0,0,1]);}}return g;}
+function warningMarks(){const g=new Geometry();for(const gate of GATES)for(let i=0;i<24;i++){const a=i/24*TAU,b=a+.065,p=(r,t)=>[Math.cos(t)*r,Math.sin(t)*r,gate.z+1.04];g.quad(p(29,a),p(31,a),p(31,b),p(29,b),[0,0,1]);}return g;}
+function shipGeometry(){const g=new Geometry();const nose=[0,0,-3.2],top=[0,.8,.7],back=[0,.15,2.7],left=[-1,-.45,1.8],right=[1,-.45,1.8],bottom=[0,-.55,-.7];g.tri(nose,left,top);g.tri(nose,top,right);g.tri(left,back,top);g.tri(top,back,right);g.tri(nose,bottom,left);g.tri(nose,right,bottom);g.tri(left,bottom,back);g.tri(right,back,bottom);
+ for(const side of [-1,1]){const a=[side*.6,-.1,-1.1],b=[side*3.2,-.4,2.4],c=[side*.7,0,2.1],d=[side*2.5,-.45,2.8];g.tri(a,b,c);g.tri(b,d,c);g.tri(a,[side*.7,-.3,2.1],b);g.tri([side*.55,.35,1],[side*.9,1.5,2.3],[side*1,.0,2.6]);}return g;}
+function canopy(){const g=new Geometry();g.tri([0,.08,-2.1],[-.55,.43,.35],[0,.82,.6]);g.tri([0,.08,-2.1],[0,.82,.6],[.55,.43,.35]);return g;}
+function engine(){const g=new Geometry();for(const x of [-.6,.6]){g.quad([x-.21,-.13,2.54],[x+.21,-.13,2.54],[x+.21,.2,2.54],[x-.21,.2,2.54],[0,0,1]);g.tri([x-.19,0,2.6],[x+.19,0,2.6],[x,0,5.9]);g.tri([x,-.17,2.6],[x,.17,2.6],[x,0,5.9]);}return g;}
+
+const VERT=`attribute vec3 aPosition;attribute vec3 aNormal;uniform mat4 uVP;uniform mat4 uModel;uniform vec3 uEye;varying vec3 vNormal;varying vec3 vView;varying vec3 vWorld;void main(){vec4 world=uModel*vec4(aPosition,1.0);vWorld=world.xyz;vNormal=mat3(uModel)*aNormal;vView=uEye-world.xyz;gl_Position=uVP*world;}`;
+const FRAG=`#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying vec3 vNormal;varying vec3 vView;varying vec3 vWorld;uniform vec3 uColor;uniform float uUnlit;uniform float uAlpha;uniform float uFog;void main(){vec3 n=normalize(vNormal);float light=max(dot(n,normalize(vec3(-.65,.8,.65))),0.0);float rim=pow(1.0-abs(dot(n,normalize(vView*.001))),3.0);float shade=.14+light*.76+rim*.2;vec3 lit=sqrt(max(uColor*shade,vec3(0.0)));vec3 color=mix(lit,uColor,uUnlit);float fog=1.0-exp(-length(vView*.001)*(uFog*1000.0));color=mix(color,vec3(.025,.047,.061),min(.9,fog));gl_FragColor=vec4(color,uAlpha);}`;
+const STAR_VERT=`attribute vec3 aPosition;attribute vec3 aNormal;uniform mat4 uVP;uniform float uDpr;varying vec3 vColor;void main(){gl_Position=uVP*vec4(aPosition,1.0);gl_PointSize=aNormal.x*uDpr;vColor=vec3(aNormal.y*.88,aNormal.y*.94,aNormal.y);}`;
+const STAR_FRAG=`precision mediump float;varying vec3 vColor;void main(){float d=distance(gl_PointCoord,vec2(.5));if(d>.5)discard;gl_FragColor=vec4(vColor,(1.0-smoothstep(.1,.5,d))*.9);}`;
+function seeded(seed){let a=seed;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+class SpaceRenderer{
+ constructor(canvas){
+  this.canvas=canvas;const gl=canvas.getContext('webgl',{alpha:false,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:false});
+  if(!gl)throw new Error('WebGL ist auf diesem Gerät nicht verfügbar.');this.gl=gl;this.time=0;this.eye=[0,7,C.startZ+23];this.target=[0,0,C.startZ-45];this.roll=0;this.wasReady=true;this.quality=1.6;
+  this.program=this.programOf(VERT,FRAG);this.starProgram=this.programOf(STAR_VERT,STAR_FRAG);this.uniforms={};for(const name of ['uVP','uModel','uEye','uColor','uUnlit','uAlpha','uFog'])this.uniforms[name]=gl.getUniformLocation(this.program,name);
+  this.locations={p:gl.getAttribLocation(this.program,'aPosition'),n:gl.getAttribLocation(this.program,'aNormal')};
+  this.meshes={shell:this.upload(sphereShell()),shellLines:this.upload(surfaceLines(),gl.LINES),tunnel:this.upload(cylinder(C.tunnelRadius,-C.lip,C.lip,true)),tunnelLines:this.upload(tunnelLines(),gl.LINES),rails:this.upload(rails()),marks:this.upload(warningMarks()),ship:this.upload(shipGeometry()),canopy:this.upload(canopy()),engine:this.upload(engine())};
+  this.lips=[];for(const z of [C.lip,-C.lip])this.lips.push({frame:this.upload(annulus(0,0,31.7,38,z,1.2)),light:this.upload(ring(0,0,31.75,.42,z+(z>0?.8:-.8))),halo:this.upload(ring(0,0,31.4,1.1,z+(z>0?.83:-.83)))});
+  this.gates=GATES.map(g=>({body:this.upload(annulus(g.x,g.y,g.r,C.tunnelRadius,g.z,2)),rim:this.upload(ring(g.x,g.y,g.r,.28,g.z+1.05)),halo:this.upload(ring(g.x,g.y,g.r-.18,.75,g.z+1.07)),back:this.upload(ring(g.x,g.y,g.r,.28,g.z-1.05))}));
+  const stars=new Geometry(),random=seeded(731);for(let i=0;i<2100;i++){const a=random()*TAU,z=random()*2-1,r=Math.sqrt(1-z*z),distance=1400+random()*1600;stars.vertex([Math.cos(a)*r*distance,Math.sin(a)*r*distance,z*distance],[random()<.96?.8+random()*1.4:2.7+random(),.22+random()*.65,0]);}this.stars=this.upload(stars,gl.POINTS);
+  gl.clearColor(.018,.029,.048,1);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);this.resize();
+ }
+ programOf(vs,fs){const gl=this.gl;const compile=(type,src)=>{const sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(sh));return sh;};const v=compile(gl.VERTEX_SHADER,vs),f=compile(gl.FRAGMENT_SHADER,fs),p=gl.createProgram();gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);gl.deleteShader(v);gl.deleteShader(f);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p;}
+ upload(g,mode){const gl=this.gl,p=gl.createBuffer(),n=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,p);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(g.p),gl.STATIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,n);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(g.n),gl.STATIC_DRAW);return{p,n,count:g.p.length/3,mode:mode||gl.TRIANGLES};}
+ bind(mesh,locations=this.locations){const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,mesh.p);gl.enableVertexAttribArray(locations.p);gl.vertexAttribPointer(locations.p,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,mesh.n);gl.enableVertexAttribArray(locations.n);gl.vertexAttribPointer(locations.n,3,gl.FLOAT,false,0,0);}
+ draw(mesh,color,{unlit=0,alpha=1,transform=identity(),fog=.00065,additive=false}={}){const gl=this.gl,u=this.uniforms;this.bind(mesh);gl.uniformMatrix4fv(u.uModel,false,transform);gl.uniform3fv(u.uColor,color);gl.uniform1f(u.uUnlit,unlit);gl.uniform1f(u.uAlpha,alpha);gl.uniform1f(u.uFog,fog);if(alpha<1||additive){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,additive?gl.ONE:gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);}else{gl.disable(gl.BLEND);gl.depthMask(true);}gl.drawArrays(mesh.mode,0,mesh.count);gl.depthMask(true);}
+ resize(){const w=this.canvas.clientWidth,h=this.canvas.clientHeight,pixels=2200000;this.dpr=Math.min(devicePixelRatio||1,this.quality,Math.sqrt(pixels/(w*h)));const ww=Math.round(w*this.dpr),hh=Math.round(h*this.dpr);if(this.canvas.width!==ww||this.canvas.height!==hh){this.canvas.width=ww;this.canvas.height=hh;}this.gl.viewport(0,0,ww,hh);this.aspect=w/h;this.portrait=h>w;}
+ render(flight,dt,options={}){
+  const gl=this.gl;this.time+=dt;const ready=flight.state==='ready',finished=flight.state==='finished';const t=this.time;
+  let desiredEye,desiredTarget;
+  if(ready){desiredEye=[27+Math.sin(t*.1)*5,24,465];desiredTarget=[0,0,0];}
+  else if(flight.phase==='departure'){
+    // Swing around only after the ship has cleared the far opening: the sphere is behind it.
+    const turn=clamp((-flight.z-C.lip-17)/115,0,1),smooth=turn*turn*(3-2*turn);
+    const theta=smooth*2.18,dist=26+smooth*58;
+    desiredEye=[flight.x+Math.sin(theta)*dist,flight.y+7+smooth*27,flight.z+Math.cos(theta)*dist];
+    desiredTarget=[flight.x*(1-smooth*.65),flight.y*(1-smooth*.7),flight.z-30+smooth*140];
+  }else{desiredEye=[flight.x*.8,flight.y*.8+5.5,flight.z+22];desiredTarget=[flight.x*.96,flight.y*.96,flight.z-48];}
+  const smoothing=ready||this.wasReady?1:1-Math.exp(-dt*5.5);for(let i=0;i<3;i++){this.eye[i]+=(desiredEye[i]-this.eye[i])*smoothing;this.target[i]+=(desiredTarget[i]-this.target[i])*smoothing;}
+  this.wasReady=ready;const shake=options.reduceMotion?0:flight.hitTimer*.12;const eye=this.eye.map((v,i)=>v+(i<2?Math.sin(t*71+i*4)*shake:0));
+  const projection=perspective((this.portrait?69:59)*Math.PI/180,this.aspect,.15,6000);
+  if(ready){projection[8]=this.portrait?0:-.45;projection[9]=this.portrait?-.64:0;}
+  const vp=multiply(projection,lookAt(eye,this.target));this.vp=vp;gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  gl.useProgram(this.starProgram);this.bind(this.stars,{p:gl.getAttribLocation(this.starProgram,'aPosition'),n:gl.getAttribLocation(this.starProgram,'aNormal')});gl.uniformMatrix4fv(gl.getUniformLocation(this.starProgram,'uVP'),false,vp);gl.uniform1f(gl.getUniformLocation(this.starProgram,'uDpr'),this.dpr);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.depthMask(false);gl.drawArrays(gl.POINTS,0,this.stars.count);gl.depthMask(true);
+  gl.useProgram(this.program);gl.uniformMatrix4fv(this.uniforms.uVP,false,vp);gl.uniform3fv(this.uniforms.uEye,eye);
+  this.draw(this.meshes.shell,[.33,.41,.4]);this.draw(this.meshes.shellLines,[.10,.17,.18],{unlit:1,alpha:.43});
+  this.draw(this.meshes.tunnel,[.027,.063,.065],{fog:.004});this.draw(this.meshes.tunnelLines,[.085,.19,.18],{unlit:1,fog:.0035});
+  for(const lip of this.lips)this.draw(lip.frame,[.09,.17,.16]);
+  for(const gate of this.gates)this.draw(gate.body,[.058,.095,.102],{fog:.0025});
+  this.draw(this.meshes.rails,[.35,.67,.58],{unlit:1,fog:.004});this.draw(this.meshes.marks,[.88,.57,.25],{unlit:1,fog:.003});
+  for(const lip of this.lips){this.draw(lip.light,[.69,.96,.69],{unlit:1});this.draw(lip.halo,[.46,.92,.7],{unlit:1,alpha:.18,additive:true});}
+  for(let i=0;i<this.gates.length;i++){const g=this.gates[i],passed=flight.gateDone.has(i),color=passed?[.3,.52,.52]:[.65,.93,.67];this.draw(g.rim,color,{unlit:1,fog:.002});this.draw(g.back,color,{unlit:1,fog:.002});this.draw(g.halo,color,{unlit:1,alpha:.17,additive:true,fog:.002});}
+  if(!ready){
+    this.roll+=(-flight.vx*.025-this.roll)*(1-Math.exp(-dt*8));const shipModel=model(flight.x,flight.y,flight.z,this.roll,flight.vy*.012);
+    this.draw(this.meshes.ship,flight.hitTimer>0?[.66,.25,.12]:[.43,.5,.48],{transform:shipModel,fog:0});this.draw(this.meshes.canopy,[.11,.37,.42],{unlit:.5,transform:shipModel,fog:0});this.draw(this.meshes.engine,[.58,.96,.9],{unlit:1,alpha:.7+.2*Math.sin(t*48),additive:true,transform:shipModel,fog:0});
+  }
+  gl.disable(gl.BLEND);gl.depthMask(true);
+ }
+}
+
+
+const $=id=>document.getElementById(id);
+const flight=new Flight();let renderer,last=0,frameId=0,uiTimer=0,messageTimer=0,braking=false,stickPointer=null,brakePointer=null,inputX=0,inputY=0,muted=true,slowFrames=0;
+const keys=new Set(),reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let audioContext,engineOsc,engineGain;
+function audioInit(){if(audioContext){if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});return;}try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext=new Audio();engineOsc=audioContext.createOscillator();engineGain=audioContext.createGain();const filter=audioContext.createBiquadFilter();engineOsc.type='sawtooth';engineOsc.frequency.value=48;filter.type='lowpass';filter.frequency.value=130;engineGain.gain.value=0;engineOsc.connect(filter);filter.connect(engineGain);engineGain.connect(audioContext.destination);engineOsc.start();audioContext.resume().catch(()=>{});}catch{audioContext=null;}}
+function beep(freq,duration,volume=.035,type='sine'){if(muted||!audioContext)return;const o=audioContext.createOscillator(),g=audioContext.createGain(),now=audioContext.currentTime;o.type=type;o.frequency.setValueAtTime(freq,now);o.frequency.exponentialRampToValueAtTime(freq*.6,now+duration);g.gain.setValueAtTime(volume,now);g.gain.exponentialRampToValueAtTime(.001,now+duration);o.connect(g);g.connect(audioContext.destination);o.start();o.stop(now+duration);}
+function engineAudio(){if(!engineGain)return;const active=!muted&&flight.state==='flying';engineGain.gain.setTargetAtTime(active?.018:0,audioContext.currentTime,.12);engineOsc.frequency.setTargetAtTime(36+flight.speed*1.5,audioContext.currentTime,.15);}
+function message(text,seconds=3){$('flightMessage').textContent=text;$('flightMessage').classList.add('visible');messageTimer=seconds;}
+function clearInput(){keys.clear();inputX=0;inputY=0;braking=false;stickPointer=null;brakePointer=null;$('stick').style.transform='translate(0px,0px)';$('joystick').classList.remove('active');$('brakeButton').classList.remove('active');}
+function begin(){flight.reset();clearInput();last=performance.now();$('game').classList.add('playing');for(const id of ['startScreen','targetLabel','startFootnote','resultScreen','pauseScreen'])$(id).hidden=true;for(const id of ['telemetry','pauseButton','controls','journey','reticle'])$(id).hidden=false;$('collisionCount').textContent='00';$('collisionCount').parentElement.classList.remove('hit');$('cleanLabel').textContent='Sauberer Flug';audioInit();message('Ziele auf die leuchtende Tunnelöffnung.',4.2);$('pauseButton').focus({preventScroll:true});updateUI();}
+function pause(){if(flight.state!=='flying')return;flight.pause();clearInput();$('pauseScreen').hidden=false;$('phaseLabel').textContent='PAUSE';$('resumeButton').focus({preventScroll:true});engineAudio();}
+function resume(){if(flight.state!=='paused')return;flight.resume();clearInput();$('pauseScreen').hidden=true;last=performance.now();audioInit();$('pauseButton').focus({preventScroll:true});updateUI();}
+function finish(){clearInput();$('controls').hidden=true;$('pauseButton').hidden=true;$('reticle').hidden=true;$('resultCollisions').textContent=flight.collisions;$('resultTime').textContent=formatTime(flight.elapsed);$('resultMessage').textContent=flight.collisions===0?'Perfekter Durchflug. Keine einzige Kollision.':flight.collisions===1?'Nur eine Berührung. Schaffst du auch die Null?':'Die Kugel liegt hinter dir. Schaffst du weniger Kollisionen?';$('resultScreen').hidden=false;$('replayButton').focus({preventScroll:true});$('phaseLabel').textContent='MISSION GESCHAFFT';$('flightMessage').classList.remove('visible');beep(700,.5,.04);engineAudio();}
+const formatTime=seconds=>`${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
+function updateUI(){
+ const phases={approach:'ANFLUG',tunnel:'IM TUNNEL',departure:'FREIES ALL'};
+ $('phaseLabel').textContent=flight.state==='finished'?'MISSION GESCHAFFT':flight.state==='paused'?'PAUSE':phases[flight.phase];
+ $('collisionCount').textContent=String(flight.collisions).padStart(2,'0');$('speedValue').textContent=Math.round(flight.speed);$('speedLabel').textContent=braking||keys.has('Space')?'Bremsen':'Reiseflug';
+ const progress=flight.progress*100;$('journeyFill').style.width=progress+'%';$('journeyShip').style.left=progress+'%';
+ if(flight.phase==='approach'){$('distanceLabel').textContent='Zum Eingang';$('distanceValue').textContent=Math.max(0,Math.ceil(flight.z-C.lip))+' m';}
+ else if(flight.phase==='tunnel'){$('distanceLabel').textContent='Zum Ausgang';$('distanceValue').textContent=Math.max(0,Math.ceil(flight.z+C.lip))+' m';}
+ else{$('distanceLabel').textContent='Kugel durchquert';$('distanceValue').textContent=formatTime(flight.elapsed);}
+}
+function handleEvents(){for(const event of flight.drainEvents()){
+ if(event.type==='hit'){$('impact').classList.remove('flash');void $('impact').offsetWidth;$('impact').classList.add('flash');$('collisionCount').parentElement.classList.add('hit');$('cleanLabel').textContent='Weiterfliegen!';message(event.kind==='wall'?'Hülle berührt · zur Mitte steuern':'Hindernis berührt · weiter geht’s',1.8);beep(100,.25,.075,'triangle');}
+ if(event.type==='phase'){if(event.phase==='tunnel'){message('Durch die grünen Öffnungen fliegen.',3);beep(440,.15);}else if(event.phase==='departure'){message('Durch den Tunnel! Du bist im freien All.',4);beep(660,.35);}}
+ if(event.type==='gate'){beep(540+event.index*70,.09,.018);}
+ if(event.type==='finish')finish();
+}}
+function animate(now){
+ frameId=requestAnimationFrame(animate);const dt=Math.min((now-last)/1000||0,.1);last=now;if(document.hidden)return;
+ if(dt>.03&&flight.state==='flying')slowFrames++;else slowFrames=Math.max(0,slowFrames-1);if(slowFrames>140&&renderer.quality>1){renderer.quality=1;renderer.resize();slowFrames=0;}
+ if(flight.state==='flying'){
+  const x=inputX+(keys.has('ArrowRight')||keys.has('KeyD')?1:0)-(keys.has('ArrowLeft')||keys.has('KeyA')?1:0),y=inputY+(keys.has('ArrowUp')||keys.has('KeyW')?1:0)-(keys.has('ArrowDown')||keys.has('KeyS')?1:0);
+  flight.update(dt,{x,y,brake:braking||keys.has('Space')});handleEvents();uiTimer+=dt;if(uiTimer>.07){updateUI();engineAudio();uiTimer=0;}
+  if(messageTimer>0){messageTimer-=dt;if(messageTimer<=0)$('flightMessage').classList.remove('visible');}
+ }
+ if(flight.state!=='paused')renderer.render(flight,dt,{reduceMotion});
+}
+function moveStick(e){const box=$('joystick').getBoundingClientRect(),radius=box.width*.32;let dx=e.clientX-box.left-box.width/2,dy=e.clientY-box.top-box.height/2;const length=Math.hypot(dx,dy);if(length>radius){dx*=radius/length;dy*=radius/length;}inputX=dx/radius;inputY=-dy/radius;$('stick').style.transform=`translate(${dx}px,${dy}px)`;}
+$('joystick').addEventListener('pointerdown',e=>{if(flight.state!=='flying'||stickPointer!==null)return;e.preventDefault();stickPointer=e.pointerId;$('joystick').setPointerCapture(e.pointerId);$('joystick').classList.add('active');moveStick(e);},{passive:false});
+$('joystick').addEventListener('pointermove',e=>{if(e.pointerId!==stickPointer)return;e.preventDefault();moveStick(e);},{passive:false});
+function releaseStick(e){if(e.pointerId!==stickPointer)return;stickPointer=null;inputX=0;inputY=0;$('stick').style.transform='translate(0px,0px)';$('joystick').classList.remove('active');}
+for(const type of ['pointerup','pointercancel','lostpointercapture'])$('joystick').addEventListener(type,releaseStick);
+$('brakeButton').addEventListener('pointerdown',e=>{if(flight.state!=='flying'||brakePointer!==null)return;e.preventDefault();brakePointer=e.pointerId;braking=true;$('brakeButton').setPointerCapture(e.pointerId);$('brakeButton').classList.add('active');},{passive:false});
+function releaseBrake(e){if(e.pointerId!==brakePointer)return;brakePointer=null;braking=false;$('brakeButton').classList.remove('active');}
+for(const type of ['pointerup','pointercancel','lostpointercapture'])$('brakeButton').addEventListener(type,releaseBrake);
+$('brakeButton').addEventListener('keydown',e=>{if(e.code==='Enter'){e.preventDefault();braking=true;$('brakeButton').classList.add('active');}});
+$('brakeButton').addEventListener('keyup',e=>{if(e.code==='Enter'){braking=false;$('brakeButton').classList.remove('active');}});
+document.addEventListener('keydown',e=>{if(e.code==='Escape'||e.code==='KeyP'){e.preventDefault();if(!e.repeat){if(flight.state==='flying')pause();else if(flight.state==='paused')resume();}return;}if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD','Space'].includes(e.code)&&flight.state==='flying'){e.preventDefault();keys.add(e.code);}});
+document.addEventListener('keyup',e=>{keys.delete(e.code);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();last=performance.now();});window.addEventListener('blur',()=>{if(flight.state==='flying')pause();clearInput();});
+window.addEventListener('resize',()=>{if(renderer)renderer.resize();clearInput();});
+document.addEventListener('contextmenu',e=>{if(e.target.closest('#controls,canvas'))e.preventDefault();});
+$('startButton').addEventListener('click',begin);$('replayButton').addEventListener('click',begin);$('restartPauseButton').addEventListener('click',begin);$('pauseButton').addEventListener('click',pause);$('resumeButton').addEventListener('click',resume);$('reloadButton').addEventListener('click',()=>location.reload());
+$('soundButton').addEventListener('click',()=>{muted=!muted;audioInit();$('soundButton').setAttribute('aria-pressed',String(!muted));$('soundButton').setAttribute('aria-label',muted?'Ton einschalten':'Ton ausschalten');$('soundButton').title=muted?'Ton einschalten':'Ton ausschalten';$('soundWaves').setAttribute('d',muted?'m16 9 5 6m0-6-5 6':'M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14');engineAudio();if(!muted)beep(440,.15,.02);});
+function graphicsError(text){cancelAnimationFrame(frameId);pause();$('pauseScreen').hidden=true;$('errorScreen').hidden=false;if(text)$('errorMessage').textContent=text;$('reloadButton').focus({preventScroll:true});}
+$('space').addEventListener('webglcontextlost',e=>{e.preventDefault();graphicsError('Die Grafikverbindung wurde unterbrochen. Lade das Spiel neu, um wieder zu starten.');});
+try{renderer=new SpaceRenderer($('space'));last=performance.now();frameId=requestAnimationFrame(animate);}catch(error){console.error(error);graphicsError();}
+
+  </script>
+</body>
+</html>
