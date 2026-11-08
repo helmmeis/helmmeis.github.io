@@ -60,9 +60,19 @@
 
         <!-- Gewinn-Modal (erscheint, wenn alle Sterne da sind) -->
         <div id="win-modal" class="absolute inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center pointer-events-auto z-50">
-            <div class="bg-yellow-100 border-8 border-yellow-400 rounded-3xl p-8 max-w-md text-center shadow-2xl animate-bounce">
-                <h2 class="text-3xl md:text-4xl font-black text-amber-600 mb-4">🎉 Hurra! Super gemacht! 🎉</h2>
-                <p class="text-lg md:text-xl font-bold text-gray-700 mb-6">Maxi und Leo haben alle Schätze zusammen gefunden! Ihr seid tolle Abenteurer!</p>
+            <div class="bg-yellow-100 border-8 border-yellow-400 rounded-3xl p-6 md:p-8 max-w-md w-11/12 text-center shadow-2xl animate-bounce">
+                <h2 id="win-title" class="text-3xl md:text-4xl font-black text-amber-600 mb-2">🎉 Hurra! 🎉</h2>
+                
+                <!-- Ergebnisanzeige -->
+                <div class="bg-white/80 rounded-2xl p-4 my-4 border-2 border-yellow-300 shadow-inner">
+                    <p class="text-lg font-bold text-gray-700 mb-2">Endergebnis:</p>
+                    <div class="flex justify-around items-center text-xl font-extrabold mb-3">
+                        <div class="text-blue-600">💙 Maxi: <span id="win-score-maxi">0</span> 🌟</div>
+                        <div class="text-green-600">💚 Leo: <span id="win-score-leo">0</span> 🌟</div>
+                    </div>
+                    <p id="win-message" class="text-base md:text-lg font-bold text-amber-700"></p>
+                </div>
+
                 <button onclick="restartGame()" class="bg-gradient-to-r from-green-400 to-emerald-600 text-white font-bold text-xl px-8 py-4 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-transform border-b-4 border-emerald-800">
                     Nochmal spielen! 🚀
                 </button>
@@ -504,6 +514,25 @@
                         if (total >= totalStarsCount) {
                             setTimeout(() => {
                                 playWinSound();
+                                
+                                // Ergebnisse im Modal eintragen
+                                document.getElementById('win-score-maxi').innerText = scoreMaxi;
+                                document.getElementById('win-score-leo').innerText = scoreLeo;
+
+                                const titleEl = document.getElementById('win-title');
+                                const msgEl = document.getElementById('win-message');
+
+                                if (scoreMaxi > scoreLeo) {
+                                    titleEl.innerText = '👑 Maxi gewinnt! 🏆';
+                                    msgEl.innerText = `Maxi hat mit ${scoreMaxi} Sternen gewonnen! Super gemacht, Maxi! 💙`;
+                                } else if (scoreLeo > scoreMaxi) {
+                                    titleEl.innerText = '👑 Leo gewinnt! 🏆';
+                                    msgEl.innerText = `Leo hat mit ${scoreLeo} Sternen gewonnen! Super gemacht, Leo! 💚`;
+                                } else {
+                                    titleEl.innerText = '🤝 Unentschieden! 🏆';
+                                    msgEl.innerText = `Beide haben exakt ${scoreMaxi} Sterne gesammelt! Ihr seid ein fantastisches Team! 🎉`;
+                                }
+
                                 document.getElementById('win-modal').classList.remove('hidden');
                             }, 300);
                         }
